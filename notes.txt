@@ -1,0 +1,5 @@
+Redis Password for areyoucoming
+9dtBwQvPM9cuiACjHoiRSJw4M0krORPa
+
+Endpoint:
+redis-18025.c44.us-east-1-2.ec2.cloud.redislabs.com:18025
