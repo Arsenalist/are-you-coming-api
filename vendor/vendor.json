@@ -53,8 +53,38 @@
 			"versionExact": "v1.4.0"
 		},
 		{
+			"checksumSHA1": "26dsny+PV+ZcEB0Im5HYcXh12yc=",
+			"path": "github.com/go-redis/redis",
+			"revision": "dab9d3f80286dfc493442e6f0b1c7809873ca602",
+			"revisionTime": "2019-11-19T10:37:26Z"
+		},
+		{
 			"path": "github.com/go-redis/redis/v7",
 			"revision": ""
+		},
+		{
+			"path": "github.com/go-redis/redis/v7/internal",
+			"revision": "dab9d3f80286dfc493442e6f0b1c7809873ca602"
+		},
+		{
+			"path": "github.com/go-redis/redis/v7/internal/consistenthash",
+			"revision": "dab9d3f80286dfc493442e6f0b1c7809873ca602"
+		},
+		{
+			"path": "github.com/go-redis/redis/v7/internal/hashtag",
+			"revision": "dab9d3f80286dfc493442e6f0b1c7809873ca602"
+		},
+		{
+			"path": "github.com/go-redis/redis/v7/internal/pool",
+			"revision": "dab9d3f80286dfc493442e6f0b1c7809873ca602"
+		},
+		{
+			"path": "github.com/go-redis/redis/v7/internal/proto",
+			"revision": "dab9d3f80286dfc493442e6f0b1c7809873ca602"
+		},
+		{
+			"path": "github.com/go-redis/redis/v7/internal/util",
+			"revision": "dab9d3f80286dfc493442e6f0b1c7809873ca602"
 		},
 		{
 			"checksumSHA1": "cMMG97ehMrVNuNbf7x5pGhuZMOI=",
