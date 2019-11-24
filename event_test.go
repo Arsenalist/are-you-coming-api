@@ -9,10 +9,10 @@ import (
 func TestEvent_GenerateHash(t *testing.T) {
 
 	e := &Event{"royalrumble", "Royal Rumble", "permalink", []Rsvp{
-		{Name:      "Zarar",
-		UserId:    "zarar",
-		EventHash: "royalrumble",
-		Rsvp:      "yes"}}}
+		{Name: "Zarar",
+			UserId:    "zarar",
+			EventHash: "royalrumble",
+			Rsvp:      "yes"}}}
 
 	got := e.GenerateHash()
 	assert.Equal(t, e.Hash, got, "The generated hash and the returned has should be the same")
@@ -21,7 +21,7 @@ func TestEvent_GenerateHash(t *testing.T) {
 
 func TestEvent_AddRsvp(t *testing.T) {
 	e := &Event{"royalrumble", "Royal Rumble", "permalink", []Rsvp{
-		{Name:      "Zarar",
+		{Name: "Zarar",
 			UserId:    "zarar",
 			EventHash: "royalrumble",
 			Rsvp:      "yes"}}}
@@ -37,13 +37,35 @@ func TestEvent_AddRsvp(t *testing.T) {
 
 func TestEvent_UpdateExistingRsvp(t *testing.T) {
 	e := &Event{"royalrumble", "Royal Rumble", "permalink", []Rsvp{
-		{Name:      "Zarar",
+		{Name: "Zarar",
 			UserId:    "zarar",
 			EventHash: "royalrumble",
 			Rsvp:      "yes"}}}
 
 	e.UpdateExistingRsvp("zarar", "no")
 	assert.Equal(t, "no", e.Rsvps[0].Rsvp, "RSVP should be switched to no")
+	e.UpdateExistingRsvp("zarar", "yes")
+	assert.Equal(t, "yes", e.Rsvps[0].Rsvp, "RSVP should be switched to yes")
 }
 
+func TestEvent_GetRsvp(t *testing.T) {
+	e := &Event{"royalrumble", "Royal Rumble", "permalink", []Rsvp{
+		{Name: "Zarar",
+			UserId:    "zarar",
+			EventHash: "royalrumble",
+			Rsvp:      "yes"},
+		{Name: "Jim",
+			UserId:    "jim",
+			EventHash: "royalrumble",
+			Rsvp:      "no"}}}
+	rsvp, err := e.GetRsvp("zarar")
+	assert.Equal(t, "zarar", rsvp.UserId, "zarar should be returned as the RSVP")
+	assert.Equal(t, nil, err)
+	rsvp, err = e.GetRsvp("jim")
+	assert.Equal(t, "jim", rsvp.UserId, "jim should be returned as the RSVP")
+	assert.Equal(t, nil, err)
+	rsvp, err = e.GetRsvp("notauserid")
+	assert.Equal(t, "", rsvp.UserId, "rsvp.UserId should be empty as nothing was found")
+	assert.NotNil(t, err, "There should be an error as no RSVP was found")
 
+}
