@@ -43,27 +43,3 @@ func SaveRsvp(event Event, userId string, name string, rsvpString string) {
 	}
 	SaveEvent(event)
 }
-/*
-func main() {
-	event := Event{
-		Hash: "testhash",
-		Name: "Zarar",
-		Rsvps: []Rsvp{
-			{
-			"Zarar",
-			"zarar",
-			"testhash",
-			"no"},
-			{
-			"Anne",
-			"anne",
-			"testhash",
-			"no"}}}
-	SaveEvent(event)
-	result, _ := GetEvent("testhash")
-	SaveRsvp(*result, "zarar", "Zarar", "yes")
-	result, _ = GetEvent("testhash")
-	r, _ := json.Marshal(result)
-	fmt.Println("result is " + string(r))
-}
-*/
