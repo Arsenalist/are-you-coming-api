@@ -6,29 +6,25 @@ import (
 	"testing"
 )
 
-func TestEvent_GenerateHash(t *testing.T) {
-
-	e := &Event{"royalrumble", "Royal Rumble", "permalink", []Rsvp{
+func AnEventWithWithOneRsvp() *Event {
+	return &Event{"royalrumble", "Royal Rumble", "permalink", []Rsvp{
 		{Name: "Zarar",
 			UserId:    "zarar",
 			EventHash: "royalrumble",
 			Rsvp:      "yes"}}}
+}
 
+func TestEvent_GenerateHash(t *testing.T) {
+	e := AnEventWithWithOneRsvp()
 	got := e.GenerateHash()
 	assert.Equal(t, e.Hash, got, "The generated hash and the returned has should be the same")
 	assert.Equal(t, fmt.Sprintf("/%s", got), e.Permalink, "Permalink should be slash followed by hash")
 }
 
 func TestEvent_AddRsvp(t *testing.T) {
-	e := &Event{"royalrumble", "Royal Rumble", "permalink", []Rsvp{
-		{Name: "Zarar",
-			UserId:    "zarar",
-			EventHash: "royalrumble",
-			Rsvp:      "yes"}}}
-
+	e := AnEventWithWithOneRsvp()
 	e.AddRsvp("Zarar", "zarar", "no")
 	assert.Equal(t, 1, len(e.Rsvps), "There should still be only 1 RSVP as User ID is the same")
-
 	e.AddRsvp("Ben", "zarar2", "no")
 	assert.Equal(t, 2, len(e.Rsvps), "There should be 2 RSVPs")
 	assert.Equal(t, "yes", e.Rsvps[0].Rsvp, "The first RSVP should be a yes (unchanged)")
@@ -36,12 +32,7 @@ func TestEvent_AddRsvp(t *testing.T) {
 }
 
 func TestEvent_UpdateExistingRsvp(t *testing.T) {
-	e := &Event{"royalrumble", "Royal Rumble", "permalink", []Rsvp{
-		{Name: "Zarar",
-			UserId:    "zarar",
-			EventHash: "royalrumble",
-			Rsvp:      "yes"}}}
-
+	e := AnEventWithWithOneRsvp()
 	e.UpdateExistingRsvp("zarar", "no")
 	assert.Equal(t, "no", e.Rsvps[0].Rsvp, "RSVP should be switched to no")
 	e.UpdateExistingRsvp("zarar", "yes")
