@@ -8,8 +8,6 @@ import (
 	"os"
 )
 
-var db = make(map[string]string)
-
 func setupRouter() *gin.Engine {
 	r := gin.Default()
 	r.Use(cors.New(cors.Config{
