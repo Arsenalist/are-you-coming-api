@@ -53,7 +53,7 @@ func main() {
 	r := setupRouter()
 	port := os.Getenv("PORT")
 	if port == "" {
-		log.Panic("Port not set, forcing to 8080")
+		log.Println("Port not set, forcing to 8080")
 		port = "8080"
 	}
 	r.Run(":" + port)
