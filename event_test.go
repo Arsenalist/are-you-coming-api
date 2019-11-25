@@ -23,9 +23,9 @@ func TestEvent_GenerateHash(t *testing.T) {
 
 func TestEvent_AddRsvp(t *testing.T) {
 	e := AnEventWithWithOneRsvp()
-	e.AddRsvp("Zarar", "zarar", "no")
+	e.AddNewRsvp("Zarar", "zarar", "no")
 	assert.Equal(t, 1, len(e.Rsvps), "There should still be only 1 RSVP as User ID is the same")
-	e.AddRsvp("Ben", "zarar2", "no")
+	e.AddNewRsvp("Ben", "zarar2", "no")
 	assert.Equal(t, 2, len(e.Rsvps), "There should be 2 RSVPs")
 	assert.Equal(t, "yes", e.Rsvps[0].Rsvp, "The first RSVP should be a yes (unchanged)")
 	assert.Equal(t, "no", e.Rsvps[1].Rsvp, "The second RSVP should be a no")
@@ -33,9 +33,9 @@ func TestEvent_AddRsvp(t *testing.T) {
 
 func TestEvent_UpdateExistingRsvp(t *testing.T) {
 	e := AnEventWithWithOneRsvp()
-	e.UpdateExistingRsvp("zarar", "no")
+	e.UpdateExistingRsvp("Zarar", "zarar", "no")
 	assert.Equal(t, "no", e.Rsvps[0].Rsvp, "RSVP should be switched to no")
-	e.UpdateExistingRsvp("zarar", "yes")
+	e.UpdateExistingRsvp("Zarar", "zarar", "yes")
 	assert.Equal(t, "yes", e.Rsvps[0].Rsvp, "RSVP should be switched to yes")
 }
 
@@ -76,5 +76,12 @@ func TestEvent_UpdateEventAttributes(t *testing.T) {
 	assert.Equal(t, "royalrumble", real.Hash, "Hash should remain the same")
 	assert.Equal(t, "permalink", real.Permalink, "Permalink should remain the same")
 	assert.Equal(t, "Zarar", real.Rsvps[0].Name, "RSVPs should remain the same")
+}
 
+func TestEvent_SaveRsvp(t *testing.T) {
+	e := AnEventWithWithOneRsvp()
+	e.SaveRsvp("Zarar", "zarar", "yes")
+	assert.Equal(t, 1, len(e.Rsvps), "Should have one RSVP")
+	e.SaveRsvp("Zarar", "zarar2", "yes")
+	assert.Equal(t, 2, len(e.Rsvps), "Should have two RSVPs")
 }

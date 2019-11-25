@@ -25,7 +25,16 @@ func (e *Event) GenerateIdentity() string {
 	return e.Hash
 }
 
-func (e *Event) AddRsvp(name string, userId string, rsvpString string) {
+func (e *Event) SaveRsvp(name string, userId string, rsvpString string) {
+	_, err := e.GetRsvp(userId)
+	if err == nil {
+		e.UpdateExistingRsvp(name, userId, rsvpString)
+	} else {
+		e.AddNewRsvp(name, userId, rsvpString)
+	}
+}
+
+func (e *Event) AddNewRsvp(name string, userId string, rsvpString string) {
 	_, err := e.GetRsvp(userId)
 	if err == nil {
 		return
@@ -38,10 +47,11 @@ func (e *Event) AddRsvp(name string, userId string, rsvpString string) {
 			rsvpString})
 }
 
-func (e *Event) UpdateExistingRsvp(userId string, rsvpString string) {
+func (e *Event) UpdateExistingRsvp(name string, userId string, rsvpString string) {
 	rsvp, err := e.GetRsvp(userId)
 	if err == nil {
 		rsvp.Rsvp = rsvpString
+		rsvp.Name = name
 	}
 }
 

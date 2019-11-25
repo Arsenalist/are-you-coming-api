@@ -32,14 +32,7 @@ func SaveEvent(event *Event) {
 	}
 }
 
-func SaveRsvp(event Event, userId string, name string, rsvpString string) {
-	_, err := event.GetRsvp(userId)
-	if err == nil {
-		fmt.Println("Found RSVP")
-		event.UpdateExistingRsvp(userId, rsvpString)
-	} else {
-		fmt.Println("Did not find RSVP")
-		event.AddRsvp(name, userId, rsvpString)
-	}
-	SaveEvent(&event)
+func SaveRsvp(event *Event, name string, userId string, rsvpString string) {
+	event.SaveRsvp(name, userId, rsvpString)
+	SaveEvent(event)
 }
