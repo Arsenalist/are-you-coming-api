@@ -19,8 +19,8 @@ func TestEvent_AddRsvp(t *testing.T) {
 	assert.Equal(t, 1, len(e.Rsvps), "There should still be only 1 RSVP as User ID is the same")
 	e.AddNewRsvp("Ben", "zarar2", "no")
 	assert.Equal(t, 2, len(e.Rsvps), "There should be 2 RSVPs")
-	assert.Equal(t, "yes", e.Rsvps[0].Rsvp, "The first RSVP should be a yes (unchanged)")
-	assert.Equal(t, "no", e.Rsvps[1].Rsvp, "The second RSVP should be a no")
+	assert.Equal(t, "yes", e.Rsvps[1].Rsvp, "The first RSVP should be a yes (unchanged)")
+	assert.Equal(t, "no", e.Rsvps[0].Rsvp, "The second RSVP should be a no")
 }
 
 func TestEvent_UpdateExistingRsvp(t *testing.T) {

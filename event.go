@@ -42,12 +42,12 @@ func (e *Event) AddNewRsvp(name string, userId string, rsvpString string) {
 	if err == nil {
 		return
 	}
-	e.Rsvps = append(e.Rsvps,
-		Rsvp{
-			name,
-			userId,
-			e.Hash,
-			rsvpString})
+	newRsvp := []Rsvp{
+		{Name: name,
+			UserId:    userId,
+			EventHash: e.Hash,
+			Rsvp:      rsvpString}}
+	e.Rsvps = append(newRsvp, e.Rsvps...)
 }
 
 func (e *Event) UpdateExistingRsvp(name string, userId string, rsvpString string) {
