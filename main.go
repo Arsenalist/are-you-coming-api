@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"log"
 	"net/http"
@@ -11,6 +12,8 @@ var db = make(map[string]string)
 
 func setupRouter() *gin.Engine {
 	r := gin.Default()
+	r.Use(cors.New(cors.Config{
+		AllowOrigins: []string{"*"}}))
 	// Get user value
 	r.GET("/event/:hash", func(c *gin.Context) {
 		hash := c.Params.ByName("hash")
