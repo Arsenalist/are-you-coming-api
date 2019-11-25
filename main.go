@@ -10,14 +10,39 @@ var db = make(map[string]string)
 func setupRouter() *gin.Engine {
 	r := gin.Default()
 	// Get user value
-	r.GET("/user/:name", func(c *gin.Context) {
-		user := c.Params.ByName("name")
-		value, ok := db[user]
-		if ok {
-			c.JSON(http.StatusOK, gin.H{"user": user, "value": value})
+	r.GET("/event/:hash", func(c *gin.Context) {
+		hash := c.Params.ByName("hash")
+		event, err := GetEvent(hash)
+		if err != nil {
+			c.JSON(http.StatusNotFound, nil)
 		} else {
-			c.JSON(http.StatusOK, gin.H{"user": user, "status": "no value"})
+			c.JSON(http.StatusOK, event)
 		}
+	})
+	r.PUT("/event", func(c *gin.Context) {
+		var json Event
+		c.ShouldBind(&json)
+		e := CreateEvent(json.Name)
+		c.JSON(http.StatusOK, e)
+		return
+	})
+	r.POST("/event", func(c *gin.Context) {
+		var json Event
+		c.ShouldBind(&json)
+		event, _ := GetEvent(json.Hash)
+		event.UpdateEventAttributes(json)
+		SaveEvent(event)
+		c.JSON(http.StatusOK, event)
+		return
+	})
+	r.POST("/event/rsvp", func(c *gin.Context) {
+		var json Rsvp
+		c.Bind(&json)
+		eventHash := json.EventHash
+		event, _ := GetEvent(eventHash)
+		SaveRsvp(event, json.Name, json.UserId, json.Rsvp)
+		c.JSON(http.StatusOK, event)
+		return
 	})
 	return r
 }

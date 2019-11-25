@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
@@ -12,13 +11,6 @@ func AnEventWithWithOneRsvp() *Event {
 			UserId:    "zarar",
 			EventHash: "royalrumble",
 			Rsvp:      "yes"}}}
-}
-
-func TestEvent_GenerateHash(t *testing.T) {
-	e := AnEventWithWithOneRsvp()
-	got := e.GenerateIdentity()
-	assert.Equal(t, e.Hash, got, "The generated hash and the returned has should be the same")
-	assert.Equal(t, fmt.Sprintf("/%s", got), e.Permalink, "Permalink should be slash followed by hash")
 }
 
 func TestEvent_AddRsvp(t *testing.T) {
@@ -84,4 +76,12 @@ func TestEvent_SaveRsvp(t *testing.T) {
 	assert.Equal(t, 1, len(e.Rsvps), "Should have one RSVP")
 	e.SaveRsvp("Zarar", "zarar2", "yes")
 	assert.Equal(t, 2, len(e.Rsvps), "Should have two RSVPs")
+}
+
+func TestNewEvent(t *testing.T) {
+	event := NewEvent("raptors vs kings")
+	assert.Equal(t, "raptors vs kings", event.Name, "Name is set correctly")
+	assert.NotEmpty(t, event.Hash, "Hash should exist")
+	assert.NotEmpty(t, event.Permalink, "Permalink should exist")
+	assert.Equal(t, "/", string(event.Permalink[0]), "First character of permalink should be /")
 }

@@ -18,9 +18,10 @@ func GetEvent(eventHash string) (*Event, error) {
 	return event, nil
 }
 
-func CreateEvent(event *Event) {
-	event.GenerateIdentity()
-	SaveEvent(event)
+func CreateEvent(name string) *Event {
+	event := NewEvent(name)
+	SaveEvent(&event)
+	return &event
 }
 
 func SaveEvent(event *Event) {

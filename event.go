@@ -19,10 +19,13 @@ type Rsvp struct {
 	Rsvp      string `json:"rsvp"`
 }
 
-func (e *Event) GenerateIdentity() string {
-	e.Hash = uniuri.New()
-	e.Permalink = "/" + e.Hash
-	return e.Hash
+func NewEvent(name string) Event {
+	event := Event{}
+	event.Name = name
+	event.Rsvps = []Rsvp{}
+	event.Hash = uniuri.New()
+	event.Permalink = "/" + event.Hash
+	return event
 }
 
 func (e *Event) SaveRsvp(name string, userId string, rsvpString string) {
