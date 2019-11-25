@@ -18,12 +18,12 @@ func GetEvent(eventHash string) (*Event, error) {
 	return event, nil
 }
 
-func CreateEvent(event Event) {
-	event.GenerateHash()
+func CreateEvent(event *Event) {
+	event.GenerateIdentity()
 	SaveEvent(event)
 }
 
-func SaveEvent(event Event) {
+func SaveEvent(event *Event) {
 	client := Client()
 	eventJson, _ := json.Marshal(event)
 	_, err := client.HSet("events", event.Hash, eventJson).Result()
@@ -41,5 +41,5 @@ func SaveRsvp(event Event, userId string, name string, rsvpString string) {
 		fmt.Println("Did not find RSVP")
 		event.AddRsvp(name, userId, rsvpString)
 	}
-	SaveEvent(event)
+	SaveEvent(&event)
 }

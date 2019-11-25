@@ -19,7 +19,7 @@ type Rsvp struct {
 	Rsvp      string `json:"rsvp"`
 }
 
-func (e *Event) GenerateHash() string {
+func (e *Event) GenerateIdentity() string {
 	e.Hash = uniuri.New()
 	e.Permalink = "/" + e.Hash
 	return e.Hash
@@ -52,4 +52,9 @@ func (e *Event) GetRsvp(userId string) (rsvp *Rsvp, err error) {
 		}
 	}
 	return &Rsvp{}, fmt.Errorf("could not find RSVP based on UserID")
+}
+
+// Copy the updateable fields on the event
+func (e *Event) UpdateEventAttributes(from Event) {
+	e.Name = from.Name
 }

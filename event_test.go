@@ -16,7 +16,7 @@ func AnEventWithWithOneRsvp() *Event {
 
 func TestEvent_GenerateHash(t *testing.T) {
 	e := AnEventWithWithOneRsvp()
-	got := e.GenerateHash()
+	got := e.GenerateIdentity()
 	assert.Equal(t, e.Hash, got, "The generated hash and the returned has should be the same")
 	assert.Equal(t, fmt.Sprintf("/%s", got), e.Permalink, "Permalink should be slash followed by hash")
 }
@@ -58,5 +58,23 @@ func TestEvent_GetRsvp(t *testing.T) {
 	rsvp, err = e.GetRsvp("notauserid")
 	assert.Equal(t, "", rsvp.UserId, "rsvp.UserId should be empty as nothing was found")
 	assert.NotNil(t, err, "There should be an error as no RSVP was found")
+}
+
+func TestEvent_UpdateEventAttributes(t *testing.T) {
+	real := AnEventWithWithOneRsvp()
+	from := AnEventWithWithOneRsvp()
+	from.Name = "A new name"
+	from.Hash = "A new hash"
+	from.Permalink = "A new permalink"
+	from.Rsvps = []Rsvp{
+		{Name: "Jim",
+			UserId:    "jim",
+			EventHash: "royalrumble",
+			Rsvp:      "yes"}}
+	real.UpdateEventAttributes(*from)
+	assert.Equal(t, "A new name", real.Name, "Name should have been updated based on from")
+	assert.Equal(t, "royalrumble", real.Hash, "Hash should remain the same")
+	assert.Equal(t, "permalink", real.Permalink, "Permalink should remain the same")
+	assert.Equal(t, "Zarar", real.Rsvps[0].Name, "RSVPs should remain the same")
 
 }
