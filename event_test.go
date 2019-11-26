@@ -29,6 +29,15 @@ func TestEvent_UpdateExistingRsvp(t *testing.T) {
 	assert.Equal(t, "no", e.Rsvps[0].Rsvp, "RSVP should be switched to no")
 	e.UpdateExistingRsvp("Zarar", "zarar", "yes")
 	assert.Equal(t, "yes", e.Rsvps[0].Rsvp, "RSVP should be switched to yes")
+	e.UpdateExistingRsvp("Zarar", "zarar", "no")
+	assert.Equal(t, "no", e.Rsvps[0].Rsvp, "RSVP should be switched to no")
+
+	e.AddNewRsvp("Jim", "zarar", "no")
+	assert.Equal(t, 2, len(e.Rsvps), "Added another RSVP to make it 2")
+
+	e.UpdateExistingRsvp("Jim", "zarar", "yes")
+	assert.Equal(t, "yes", e.Rsvps[0].Rsvp, "Should change Jim/zarar RSVP")
+	assert.Equal(t, "no", e.Rsvps[1].Rsvp, "Should not change Zarar/zarar RSVP")
 }
 
 func TestEvent_GetRsvp(t *testing.T) {
@@ -38,16 +47,22 @@ func TestEvent_GetRsvp(t *testing.T) {
 			EventHash: "royalrumble",
 			Rsvp:      "yes"},
 		{Name: "Jim",
-			UserId:    "jim",
+			UserId:    "zarar",
+			EventHash: "royalrumble",
+			Rsvp:      "yes"},
+		{Name: "Ted",
+			UserId:    "ted",
 			EventHash: "royalrumble",
 			Rsvp:      "no"}}}
-	rsvp, err := e.GetRsvp("zarar")
+	rsvp, err := e.GetRsvp("Jim", "zarar")
+	assert.Equal(t, "zarar", rsvp.UserId, "zarar should be returned as the RSVP")
+	assert.Equal(t, "Jim", rsvp.Name, "zarar should be returned as the RSVP")
+	assert.Equal(t, nil, err)
+
+	rsvp, err = e.GetRsvp("Zarar", "zarar")
 	assert.Equal(t, "zarar", rsvp.UserId, "zarar should be returned as the RSVP")
 	assert.Equal(t, nil, err)
-	rsvp, err = e.GetRsvp("jim")
-	assert.Equal(t, "jim", rsvp.UserId, "jim should be returned as the RSVP")
-	assert.Equal(t, nil, err)
-	rsvp, err = e.GetRsvp("notauserid")
+	rsvp, err = e.GetRsvp("James", "zarar")
 	assert.Equal(t, "", rsvp.UserId, "rsvp.UserId should be empty as nothing was found")
 	assert.NotNil(t, err, "There should be an error as no RSVP was found")
 }

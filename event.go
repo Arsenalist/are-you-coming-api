@@ -29,7 +29,7 @@ func NewEvent(name string) Event {
 }
 
 func (e *Event) SaveRsvp(name string, userId string, rsvpString string) {
-	_, err := e.GetRsvp(userId)
+	_, err := e.GetRsvp(name, userId)
 	if err == nil {
 		e.UpdateExistingRsvp(name, userId, rsvpString)
 	} else {
@@ -38,7 +38,7 @@ func (e *Event) SaveRsvp(name string, userId string, rsvpString string) {
 }
 
 func (e *Event) AddNewRsvp(name string, userId string, rsvpString string) {
-	_, err := e.GetRsvp(userId)
+	_, err := e.GetRsvp(name, userId)
 	if err == nil {
 		return
 	}
@@ -51,20 +51,20 @@ func (e *Event) AddNewRsvp(name string, userId string, rsvpString string) {
 }
 
 func (e *Event) UpdateExistingRsvp(name string, userId string, rsvpString string) {
-	rsvp, err := e.GetRsvp(userId)
+	rsvp, err := e.GetRsvp(name, userId)
 	if err == nil {
 		rsvp.Rsvp = rsvpString
 		rsvp.Name = name
 	}
 }
 
-func (e *Event) GetRsvp(userId string) (rsvp *Rsvp, err error) {
+func (e *Event) GetRsvp(name string, userId string) (rsvp *Rsvp, err error) {
 	for i, element := range e.Rsvps {
-		if element.UserId == userId {
+		if element.UserId == userId && element.Name == name {
 			return &e.Rsvps[i], nil
 		}
 	}
-	return &Rsvp{}, fmt.Errorf("could not find RSVP based on UserID")
+	return &Rsvp{}, fmt.Errorf("could not find RSVP based on UserID and Name")
 }
 
 // Copy the updateable fields on the event
