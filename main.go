@@ -13,7 +13,7 @@ func setupRouter() *gin.Engine {
 	r.Use(cors.New(cors.Config{
 		AllowOrigins: []string{"*"},
 		AllowHeaders: []string{"Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization, accept, origin, Cache-Control, X-Requested-With"},
-		AllowMethods: []string{"GET", "PUT", "POST", "OPTIONS"}}))
+		AllowMethods: []string{"GET", "PUT", "POST", "OPTIONS", "DELETE"}}))
 	// Get user value
 	r.GET("/event/:hash", func(c *gin.Context) {
 		hash := c.Params.ByName("hash")
@@ -46,6 +46,15 @@ func setupRouter() *gin.Engine {
 		eventHash := json.EventHash
 		event, _ := GetEvent(eventHash)
 		SaveRsvp(event, json.Name, json.UserId, json.Rsvp)
+		c.JSON(http.StatusOK, event)
+		return
+	})
+	r.DELETE("/event/rsvp", func(c *gin.Context) {
+		var json Rsvp
+		c.ShouldBind(&json)
+		eventHash := json.EventHash
+		event, _ := GetEvent(eventHash)
+		DeleteRsvp(event, json.Name, json.UserId)
 		c.JSON(http.StatusOK, event)
 		return
 	})

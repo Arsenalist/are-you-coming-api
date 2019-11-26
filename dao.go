@@ -37,3 +37,8 @@ func SaveRsvp(event *Event, name string, userId string, rsvpString string) {
 	event.SaveRsvp(name, userId, rsvpString)
 	SaveEvent(event)
 }
+
+func DeleteRsvp(event *Event, name string, userId string) {
+	event.DeleteRsvp(name, userId)
+	SaveEvent(event)
+}

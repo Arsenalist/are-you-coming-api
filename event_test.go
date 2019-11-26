@@ -13,6 +13,22 @@ func AnEventWithWithOneRsvp() *Event {
 			Rsvp:      "yes"}}}
 }
 
+func AnEventWithThreeRsvps() *Event {
+	return &Event{"royalrumble", "Royal Rumble", "permalink", []Rsvp{
+		{Name: "Zarar",
+			UserId:    "zarar",
+			EventHash: "royalrumble",
+			Rsvp:      "yes"},
+		{Name: "Jim",
+			UserId:    "zarar",
+			EventHash: "royalrumble",
+			Rsvp:      "yes"},
+		{Name: "Ted",
+			UserId:    "ted",
+			EventHash: "royalrumble",
+			Rsvp:      "no"}}}
+}
+
 func TestEvent_AddRsvp(t *testing.T) {
 	e := AnEventWithWithOneRsvp()
 	e.AddNewRsvp("Zarar", "zarar", "no")
@@ -41,19 +57,7 @@ func TestEvent_UpdateExistingRsvp(t *testing.T) {
 }
 
 func TestEvent_GetRsvp(t *testing.T) {
-	e := &Event{"royalrumble", "Royal Rumble", "permalink", []Rsvp{
-		{Name: "Zarar",
-			UserId:    "zarar",
-			EventHash: "royalrumble",
-			Rsvp:      "yes"},
-		{Name: "Jim",
-			UserId:    "zarar",
-			EventHash: "royalrumble",
-			Rsvp:      "yes"},
-		{Name: "Ted",
-			UserId:    "ted",
-			EventHash: "royalrumble",
-			Rsvp:      "no"}}}
+	e := AnEventWithThreeRsvps()
 	rsvp, err := e.GetRsvp("Jim", "zarar")
 	assert.Equal(t, "zarar", rsvp.UserId, "zarar should be returned as the RSVP")
 	assert.Equal(t, "Jim", rsvp.Name, "zarar should be returned as the RSVP")
@@ -65,6 +69,26 @@ func TestEvent_GetRsvp(t *testing.T) {
 	rsvp, err = e.GetRsvp("James", "zarar")
 	assert.Equal(t, "", rsvp.UserId, "rsvp.UserId should be empty as nothing was found")
 	assert.NotNil(t, err, "There should be an error as no RSVP was found")
+}
+
+func TestEvent_DeleteRsvp(t *testing.T) {
+	e := AnEventWithThreeRsvps()
+	e.DeleteRsvp("Jim", "zarar")
+	assert.Equal(t, 2, len(e.Rsvps), "Should be one less")
+	assert.Equal(t, "Zarar", e.Rsvps[0].Name, "First one should be Zarar (order retained")
+
+	e.DeleteRsvp("Ted", "ted")
+	assert.Equal(t, 1, len(e.Rsvps), "Should be one less")
+	assert.Equal(t, "Zarar", e.Rsvps[0].Name, "First one should be Zarar (order retained")
+
+	e.DeleteRsvp("Ted", "tedy")
+	assert.Equal(t, 1, len(e.Rsvps), "Should not have deleted anything")
+
+	e.DeleteRsvp("Tedy", "ted")
+	assert.Equal(t, 1, len(e.Rsvps), "Should not have deleted anything")
+
+	e.DeleteRsvp("Zarar", "zarar")
+	assert.Equal(t, 0, len(e.Rsvps), "Should have deleted the last RSVP")
 }
 
 func TestEvent_UpdateEventAttributes(t *testing.T) {

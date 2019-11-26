@@ -58,6 +58,21 @@ func (e *Event) UpdateExistingRsvp(name string, userId string, rsvpString string
 	}
 }
 
+func (e *Event) DeleteRsvp(name string, userId string) {
+	indexToRemove := -1
+	for i, element := range e.Rsvps {
+		if element.UserId == userId && element.Name == name {
+			indexToRemove = i
+			break
+		}
+	}
+	if indexToRemove != -1 {
+		copy(e.Rsvps[indexToRemove:], e.Rsvps[indexToRemove+1:]) // Shift a[i+1:] left one index.
+		e.Rsvps[len(e.Rsvps)-1] = Rsvp{}                         // Erase last element (write zero value).
+		e.Rsvps = e.Rsvps[:len(e.Rsvps)-1]                       // Truncate slice.
+	}
+}
+
 func (e *Event) GetRsvp(name string, userId string) (rsvp *Rsvp, err error) {
 	for i, element := range e.Rsvps {
 		if element.UserId == userId && element.Name == name {
