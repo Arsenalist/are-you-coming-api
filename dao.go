@@ -11,8 +11,10 @@ func GetEvent(eventHash string) (*Event, error) {
 	result, err := client.HGet("events", eventHash).Result()
 	if err == redis.Nil {
 		fmt.Println("Event Hash not found " + eventHash)
+		client.Close()
 		return nil, err
 	}
+	client.Close()
 	event := &Event{}
 	_ = json.Unmarshal([]byte(result), event)
 	return event, nil
@@ -31,6 +33,7 @@ func SaveEvent(event *Event) {
 	if err == redis.Nil {
 		fmt.Println("Could not save event")
 	}
+	client.Close()
 }
 
 func SaveRsvp(event *Event, name string, userId string, rsvpString string) {
