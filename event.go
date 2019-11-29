@@ -38,6 +38,9 @@ func (e *Event) SaveRsvp(name string, userId string, rsvpString string) {
 }
 
 func (e *Event) AddNewRsvp(name string, userId string, rsvpString string) {
+	if !isValidRsvpString(rsvpString) {
+		return
+	}
 	_, err := e.GetRsvp(name, userId)
 	if err == nil {
 		return
@@ -51,6 +54,9 @@ func (e *Event) AddNewRsvp(name string, userId string, rsvpString string) {
 }
 
 func (e *Event) UpdateExistingRsvp(name string, userId string, rsvpString string) {
+	if !isValidRsvpString(rsvpString) {
+		return
+	}
 	rsvp, err := e.GetRsvp(name, userId)
 	if err == nil {
 		rsvp.Rsvp = rsvpString
@@ -85,4 +91,8 @@ func (e *Event) GetRsvp(name string, userId string) (rsvp *Rsvp, err error) {
 // Copy the updateable fields on the event
 func (e *Event) UpdateEventAttributes(from Event) {
 	e.Name = from.Name
+}
+
+func isValidRsvpString(rsvpString string) bool {
+	return rsvpString == "yes" || rsvpString == "no"
 }

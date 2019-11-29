@@ -124,3 +124,10 @@ func TestNewEvent(t *testing.T) {
 	assert.NotEmpty(t, event.Permalink, "Permalink should exist")
 	assert.Equal(t, "/", string(event.Permalink[0]), "First character of permalink should be /")
 }
+
+func TestIsValidRsvpString(t *testing.T) {
+	assert.True(t, isValidRsvpString("yes"), "Yes is allowed as a RsvpString")
+	assert.True(t, isValidRsvpString("no"), "No  is allowed as a RsvpString")
+	assert.False(t, isValidRsvpString(""), "Empty string is not allowed as an RsvpString")
+	assert.False(t, isValidRsvpString(" "), "Blank string is not allowed as an RsvpString")
+}
