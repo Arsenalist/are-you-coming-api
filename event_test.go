@@ -117,12 +117,20 @@ func TestEvent_SaveRsvp(t *testing.T) {
 	assert.Equal(t, 2, len(e.Rsvps), "Should have two RSVPs")
 }
 
-func TestNewEvent(t *testing.T) {
-	event := NewEvent("raptors vs kings")
+func TestNewEventSuccess(t *testing.T) {
+	event, err := NewEvent("raptors vs kings")
 	assert.Equal(t, "raptors vs kings", event.Name, "Name is set correctly")
 	assert.NotEmpty(t, event.Hash, "Hash should exist")
 	assert.NotEmpty(t, event.Permalink, "Permalink should exist")
+	assert.Nil(t, err)
 	assert.Equal(t, "/", string(event.Permalink[0]), "First character of permalink should be /")
+}
+
+func TestNewEventWithEmptyName(t *testing.T) {
+	_, err := NewEvent("")
+	assert.NotNil(t, err)
+	_, err = NewEvent(" ")
+	assert.NotNil(t, err)
 }
 
 func TestIsValidRsvpString(t *testing.T) {

@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/dchest/uniuri"
+	"strings"
 )
 
 type Event struct {
@@ -19,13 +20,16 @@ type Rsvp struct {
 	Rsvp      string `json:"rsvp"`
 }
 
-func NewEvent(name string) Event {
+func NewEvent(name string) (Event, error) {
+	if len(strings.TrimSpace(name)) == 0 {
+		return Event{}, fmt.Errorf("name cannot be empty")
+	}
 	event := Event{}
 	event.Name = name
 	event.Rsvps = []Rsvp{}
 	event.Hash = uniuri.New()
 	event.Permalink = "/" + event.Hash
-	return event
+	return event, nil
 }
 
 func (e *Event) SaveRsvp(name string, userId string, rsvpString string) {

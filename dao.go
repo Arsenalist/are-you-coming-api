@@ -21,8 +21,10 @@ func GetEvent(eventHash string) (*Event, error) {
 }
 
 func CreateEvent(name string) *Event {
-	event := NewEvent(name)
-	SaveEvent(&event)
+	event, err := NewEvent(name)
+	if err == nil {
+		SaveEvent(&event)
+	}
 	return &event
 }
 
