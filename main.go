@@ -27,7 +27,7 @@ func setupRouter() *gin.Engine {
 	r.PUT("/event", func(c *gin.Context) {
 		var json Event
 		c.ShouldBind(&json)
-		e := CreateEvent(json.Name)
+		e := CreateEvent(json.Name, json.UserId)
 		c.JSON(http.StatusOK, e)
 		return
 	})
@@ -35,8 +35,10 @@ func setupRouter() *gin.Engine {
 		var json Event
 		c.ShouldBind(&json)
 		event, _ := GetEvent(json.Hash)
-		event.UpdateEventAttributes(json)
-		SaveEvent(event)
+		if event.UserId == json.UserId {
+			event.UpdateEventAttributes(json)
+			SaveEvent(event)
+		}
 		c.JSON(http.StatusOK, event)
 		return
 	})

@@ -10,7 +10,7 @@ func AnEventWithWithOneRsvp() *Event {
 		{Name: "Zarar",
 			UserId:    "zarar",
 			EventHash: "royalrumble",
-			Rsvp:      "yes"}}}
+			Rsvp:      "yes"}}, "userid"}
 }
 
 func AnEventWithThreeRsvps() *Event {
@@ -26,7 +26,7 @@ func AnEventWithThreeRsvps() *Event {
 		{Name: "Ted",
 			UserId:    "ted",
 			EventHash: "royalrumble",
-			Rsvp:      "no"}}}
+			Rsvp:      "no"}}, "userid"}
 }
 
 func TestEvent_AddRsvp(t *testing.T) {
@@ -118,8 +118,9 @@ func TestEvent_SaveRsvp(t *testing.T) {
 }
 
 func TestNewEventSuccess(t *testing.T) {
-	event, err := NewEvent("raptors vs kings")
+	event, err := NewEvent("raptors vs kings", "myuserid")
 	assert.Equal(t, "raptors vs kings", event.Name, "Name is set correctly")
+	assert.Equal(t, event.UserId, "myuserid", "User ID is set correctly")
 	assert.NotEmpty(t, event.Hash, "Hash should exist")
 	assert.NotEmpty(t, event.Permalink, "Permalink should exist")
 	assert.Nil(t, err)
@@ -127,9 +128,16 @@ func TestNewEventSuccess(t *testing.T) {
 }
 
 func TestNewEventWithEmptyName(t *testing.T) {
-	_, err := NewEvent("")
+	_, err := NewEvent("", "userid")
 	assert.NotNil(t, err)
-	_, err = NewEvent(" ")
+	_, err = NewEvent(" ", "userid")
+	assert.NotNil(t, err)
+}
+
+func TestNewEventWithEmptyUserId(t *testing.T) {
+	_, err := NewEvent("valid name", "")
+	assert.NotNil(t, err)
+	_, err = NewEvent("valid name", " ")
 	assert.NotNil(t, err)
 }
 

@@ -11,6 +11,7 @@ type Event struct {
 	Name      string `json:"name"`
 	Permalink string `json:"permalink"`
 	Rsvps     []Rsvp `json:"rsvps"`
+	UserId    string `json:"userId"`
 }
 
 type Rsvp struct {
@@ -20,12 +21,13 @@ type Rsvp struct {
 	Rsvp      string `json:"rsvp"`
 }
 
-func NewEvent(name string) (Event, error) {
-	if len(strings.TrimSpace(name)) == 0 {
+func NewEvent(name string, userId string) (Event, error) {
+	if len(strings.TrimSpace(name)) == 0 || len(strings.TrimSpace(userId)) == 0 {
 		return Event{}, fmt.Errorf("name cannot be empty")
 	}
 	event := Event{}
 	event.Name = name
+	event.UserId = userId
 	event.Rsvps = []Rsvp{}
 	event.Hash = uniuri.New()
 	event.Permalink = "/" + event.Hash
