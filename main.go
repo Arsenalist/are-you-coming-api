@@ -35,10 +35,8 @@ func setupRouter() *gin.Engine {
 		var json Event
 		c.ShouldBind(&json)
 		event, _ := GetEvent(json.Hash)
-		if event.UserId == json.UserId {
-			event.UpdateEventAttributes(json)
-			SaveEvent(event)
-		}
+		event.UpdateEventAttributes(json)
+		SaveEvent(event)
 		c.JSON(http.StatusOK, event)
 		return
 	})
