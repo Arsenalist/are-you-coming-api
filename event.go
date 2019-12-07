@@ -96,7 +96,13 @@ func (e *Event) GetRsvp(name string, userId string) (rsvp *Rsvp, err error) {
 
 // Copy the updateable fields on the event
 func (e *Event) UpdateEventAttributes(from Event) {
-	e.Name = from.Name
+	if isValidName(from.Name) {
+		e.Name = from.Name
+	}
+}
+
+func isValidName(name string) bool {
+	return strings.TrimSpace(name) != ""
 }
 
 func isValidRsvpString(rsvpString string) bool {

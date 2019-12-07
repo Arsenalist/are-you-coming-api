@@ -109,6 +109,15 @@ func TestEvent_UpdateEventAttributes(t *testing.T) {
 	assert.Equal(t, "Zarar", real.Rsvps[0].Name, "RSVPs should remain the same")
 }
 
+func TestEvent_UpdateEventNameWithEmptyString(t *testing.T) {
+	real := AnEventWithWithOneRsvp()
+	from := AnEventWithWithOneRsvp()
+	real.Name = "My Name"
+	from.Name = ""
+	real.UpdateEventAttributes(*from)
+	assert.Equal(t, "My Name", real.Name, "Empty string should get ignored")
+}
+
 func TestEvent_SaveRsvp(t *testing.T) {
 	e := AnEventWithWithOneRsvp()
 	e.SaveRsvp("Zarar", "zarar", "yes")
